@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Phonetic Shit</title>
+	<script type="text/javascript">
+		const phoneticObject = {
+			"ay" : 'a',
+			"ayy" : 'a',
+			"ey" : 'a',
+			"eyy" : 'a',
+			"bee" : 'b',
+			"see" : 'c',
+			"sea" : 'c',
+			"cee" : 'c',
+			"dee" : 'd',
+			"ee" : 'e',
+			"eee" : 'e',
+			"ea" : 'e',
+			"ef" : 'f',
+			"eph" : 'f',
+			"eff" : 'f',
+			"gee" : 'g',
+			"jee" : 'g',
+			"aych" : 'h',
+			"eych" : 'h',
+			"eye" : 'i',
+			"ii" : 'i',
+			"jay" : 'j',
+			"jayy" : 'j',
+			"jey" : 'j',
+			"jeyy" : 'j',
+			"kay" : 'k',
+			"kayy": 'k',
+			"el" : 'l',
+			"ell" : 'l',
+			"elle" : 'l',
+			"em" : 'm',
+			"en" : 'n',
+			"oh" : 'o',
+			"pee" : 'p',
+			"cue" : 'q',
+			"ar" : 'r',
+			"arr" : 'r',
+			"es" : 's',
+			"tee" : 't',
+			"you" : 'u',
+			'yue' : 'u',
+			"vee" : 'v',
+			"doubleyou" : 'w',
+			"ex" : 'x',
+			"why" : 'y',
+			"zee" : 'z'
+		};
+		
+		function convert() {
+			const input = document.getElementById("textBox").value;
+
+			if (input in phoneticObject) {
+				document.getElementById("result").innerHTML = phoneticObject[input];
+			} else {
+				const differences = {}
+				let min = Number.MAX_SAFE_INTEGER;
+				
+				for (let key in phoneticObject) {
+					let diff = 0;
+					let commonChars = 0;
+
+					for (let i = 0; i < Math.max(input.length, key.length); i++) {
+						if ((i < key.length) && i < input.length) {
+							if (key[i] === input[i])
+								commonChars += 1;
+							else
+								diff += Math.abs(key.charCodeAt(i) - input.charCodeAt(i));
+						}
+						else {
+							if (key.length > input.length) diff += key.charCodeAt(i);
+							if (input.length > key.length) diff += input.charCodeAt(i);
+						}
+						
+					}
+					differences[diff * (1 - (commonChars/key.length))] = key;
+				}
+
+				min = Object.keys(differences).sort((prev, next) => prev - next)[0];
+
+				document.getElementById("result").innerHTML = phoneticObject[differences[min]];
+			}
+			
+		}
+	</script>
+</head>
+<body>
+	<h1>Let's type some stuff</h1>
+	<br>
+	<p id="result"></p>
+	<br><br>
+	<form>
+		<input type="text" name="textBox" id="textBox">
+		<input type="button" value="Submit" onclick="convert()">
+	</form>
+</body>
+</html>
